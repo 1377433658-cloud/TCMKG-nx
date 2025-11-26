@@ -1,0 +1,5 @@
+{
+  "name": "中医知识图谱构建器",
+  "description": "基于React的中医知识图谱编辑器。支持手动录入实体和关系、CSV批量导入以及使用Gemini AI从文本中提取知识，并以Neo4j风格的力导向图进行可视化展示。",
+  "requestFramePermissions": []
+}
