@@ -90,7 +90,6 @@ function App() {
   const [uploadTarget, setUploadTarget] = useState<'entity' | 'relation' | null>(null);
 
   // Graph Config
-  const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [graphKey, setGraphKey] = useState(0);
   
@@ -468,10 +467,10 @@ function App() {
          </div>
       </div>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden min-h-0">
         {/* Sidebar */}
-        <div className="w-64 bg-white border-r flex flex-col shadow z-10">
-           <div className="flex border-b">
+        <div className="w-64 bg-white border-r flex flex-col shadow z-10 shrink-0">
+           <div className="flex border-b shrink-0">
              <button onClick={() => {setActiveTab(DataTab.MANUAL); setLastGraphTab(DataTab.MANUAL)}} className={`flex-1 py-3 text-xs font-bold ${activeTab===DataTab.MANUAL?'text-emerald-600 border-b-2 border-emerald-500':'text-gray-500'}`}>概览</button>
              <button onClick={() => setActiveTab(DataTab.IMPORT)} className={`flex-1 py-3 text-xs font-bold ${activeTab===DataTab.IMPORT?'text-emerald-600 border-b-2 border-emerald-500':'text-gray-500'}`}>导入</button>
              <button onClick={() => setActiveTab(DataTab.STYLE)} className={`flex-1 py-3 text-xs font-bold ${activeTab===DataTab.STYLE?'text-emerald-600 border-b-2 border-emerald-500':'text-gray-500'}`}>样式</button>
@@ -803,13 +802,13 @@ function App() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 bg-gray-50 overflow-auto relative p-4" id="analysis-dashboard">
+        <div className="flex-1 bg-gray-50 overflow-hidden relative p-4 h-full" id="analysis-dashboard">
            {/* Hierarchical View */}
            {activeTab === DataTab.ANALYSIS && activeAlgorithm === AlgorithmType.HIERARCHICAL && dendrogramData ? (
              <div className="w-full h-full bg-white p-4 shadow rounded flex flex-col">
                 <h3 className="font-bold text-gray-700 mb-2">层次聚类树状图 ({algoConfig.hierarchical.distanceType} - {algoConfig.hierarchical.method})</h3>
-                <div className="flex-1">
-                  <Dendrogram data={dendrogramData} width={800} height={500} orientation={algoConfig.hierarchical.orientation}/>
+                <div className="flex-1 min-h-0">
+                  <Dendrogram data={dendrogramData} width={0} height={0} orientation={algoConfig.hierarchical.orientation}/>
                 </div>
              </div>
            ) : (activeTab === DataTab.ANALYSIS && activeAlgorithm === AlgorithmType.HIERARCHICAL && !dendrogramData) ? (
@@ -818,7 +817,7 @@ function App() {
              // Standard Graph View or Other Views
              <div className="w-full h-full relative border bg-white shadow rounded overflow-hidden flex flex-col">
                 {activeTab === DataTab.ANALYSIS && activeAlgorithm === AlgorithmType.ASSOCIATION && assocRules.length > 0 && (
-                   <div className="h-1/3 border-b overflow-auto p-4 bg-gray-50">
+                   <div className="h-1/3 border-b overflow-auto p-4 bg-gray-50 shrink-0">
                       <h4 className="font-bold text-sm mb-2">关联规则列表 (Top {assocRules.length})</h4>
                       <table className="w-full text-xs text-left bg-white border">
                         <thead className="bg-gray-100">
@@ -840,7 +839,7 @@ function App() {
                       <div className="mt-2 text-[10px] text-gray-500">
                         * 支持度(Support): 规则在所有交易中出现的概率。<br/>
                         * 置信度(Confidence): 前项出现时后项同时出现的概率。<br/>
-                        * 提升度(Lift): 规则的相关性，大于1 表示正相关。
+                        * 提升度(Lift): 规则的相关性，>1 表示正相关。
                       </div>
                    </div>
                 )}
@@ -865,12 +864,10 @@ function App() {
                     </div>
                 )}
 
-                <div className="flex-1 relative">
+                <div className="flex-1 relative min-h-0 w-full h-full">
                     <ForceGraph 
                       key={graphKey}
                       data={activeGraphData}
-                      width={dimensions.width}
-                      height={dimensions.height}
                       config={graphConfig}
                       groupStyles={groupStyles}
                       onNodeClick={setSelectedNode}
